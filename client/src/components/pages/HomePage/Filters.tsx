@@ -4,10 +4,11 @@ import RangeSlider from '../../common/RangeSlider';
 import { Heading2, Body } from '../../../shared/Styles';
 import SelectionFilter from '../../common/SelectionFilter';
 import { SearchFilters, SelectedSearchFilters } from '../../../shared/Models';
-import { filterSchema } from '../../../shared/Constants';
+import { Schema } from '../../../shared/Constants';
 
 
 interface FiltersProps {
+  schema: Schema;
   filters: any;
   selectedFilters: any;
   setSelectedFilters: (value: any) => void;
@@ -23,14 +24,14 @@ const updateSelectionFilter = (selectedFilter: Set<string>, value: string): Set<
   return newFilters;
 };
 
-const Filters: React.FC<FiltersProps> = ({ filters, selectedFilters, setSelectedFilters }) => {
+const Filters: React.FC<FiltersProps> = ({ schema, filters, selectedFilters, setSelectedFilters }) => {
   const fields = Object.keys(filters);
   return (
     <FiltersWrapper>
       <FilterTitle>Filter your search</FilterTitle>
       {fields.map((filter, i) => {
         if (filters[filter]) {
-          if (filterSchema[filter] == "slider") {
+          if (schema[filter] == "slider") {
             return <FilterComponent>
                     <FilterSubtitle>{filter}</FilterSubtitle>
                       <RangeSlider
@@ -46,7 +47,7 @@ const Filters: React.FC<FiltersProps> = ({ filters, selectedFilters, setSelected
                         }
                       />
                     </FilterComponent>
-          } else if (filterSchema[filter] == "selection") {
+          } else if (schema[filter] == "selection") {
             return <FilterComponent>
                     <FilterSubtitle>{filter}</FilterSubtitle>
                     <SelectionFilter

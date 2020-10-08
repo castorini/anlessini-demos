@@ -1,5 +1,6 @@
 import { OptionTypeBase } from 'react-select';
-import schema from './filterSchema/filterSchemaACL.json'
+import filterSchemaACL from './filterSchema/filterSchemaACL.json'
+import filterSchemaCord19 from './filterSchema/filterSchemaCord19.json'
 
 /* Routes */
 export const HOME_ROUTE = '/';
@@ -15,7 +16,7 @@ export const CONTENT_WIDTH = 1100;
 
 /* API */
 export const API_BASE =
-  process.env.NODE_ENV === 'development' ? 'https://ug6g4yngl0.execute-api.us-east-1.amazonaws.com/test' : 'https://ug6g4yngl0.execute-api.us-east-1.amazonaws.com/test';
+  process.env.NODE_ENV === 'development' ? 'https://iqlbtpcb4g.execute-api.us-west-2.amazonaws.com/Prod' : 'https://iqlbtpcb4g.execute-api.us-west-2.amazonaws.com/Prod';
 export const SEARCH_ENDPOINT = '/search';
 export const SEARCH_COLLAPSED_ENDPOINT = '/search/log/collapsed';
 export const SEARCH_EXPANDED_ENDPOINT = '/search/log/expanded';
@@ -30,15 +31,46 @@ export interface SearchVerticalOption extends OptionTypeBase {
   label: string;
 }
 
+export const SERACH_VERTICAL_ACL: SearchVerticalOption = { value: 'acl', label: 'ACL' };
+export const SERACH_VERTICAL_CORD19: SearchVerticalOption = { value: 'cord19', label: 'CORD19'};
+
 export const SEARCH_VERTICAL_OPTIONS: Array<SearchVerticalOption> = [
-  { value: 'cord19', label: 'ACL' },
+  SERACH_VERTICAL_ACL,
+  SERACH_VERTICAL_CORD19
 ];
+
+export const getSearchVertical = (label: string): SearchVerticalOption => {
+  switch (label) {
+    case 'acl': {
+      return SERACH_VERTICAL_ACL;
+    }
+    case 'cord19': {
+      return SERACH_VERTICAL_CORD19;
+    }
+    default: {
+      return SERACH_VERTICAL_CORD19;
+    }
+  }
+}
 
 /* filter schema */
 export interface Schema {
   [key: string]: any;
 }
-export const filterSchema = schema as Schema;
+
+export const getFilterSchema = (vertical: SearchVerticalOption): Schema => {
+  switch(vertical.label) {
+    case SERACH_VERTICAL_ACL.label: {
+      return filterSchemaACL as Schema;
+    }
+    case SERACH_VERTICAL_CORD19.label: {
+      return filterSchemaCord19 as Schema;
+    }
+    default: {
+      return {} as Schema;
+    }
+  }
+}
 
 /* NLTK Stopwords */
 export const STOP_WORDS = new Set([
