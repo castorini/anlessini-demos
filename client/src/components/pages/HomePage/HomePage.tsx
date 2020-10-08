@@ -78,11 +78,16 @@ const filterArticles = (filterSchema: Schema, selectedFilters: any, article: Bas
   const fields = Object.keys(selectedFilters);
   fields.forEach(field => {
     if (filterSchema[field] == "slider") {
-      article_status = article_status && article[field] != "None" && Number(article[field].substr(0, 4)) >= selectedFilters[field][0] 
+      article_status = article_status && article[field] !== undefined && Number(article[field].substr(0, 4)) >= selectedFilters[field][0] 
                        && Number(article[field].substr(0, 4)) <= selectedFilters[field][1]
     } else if (filterSchema[field] == "selection") {
-      article_status = article_status && (selectedFilters[field].size == 0 || 
-                       article[field].some((a: String) => selectedFilters[field].has(a)))
+      if (article[field] instanceof Array) {
+        article_status = article_status && (selectedFilters[field].size == 0 || 
+          article[field].some((a: String) => selectedFilters[field].has(a)));
+      } else {
+        article_status = article_status && (selectedFilters[field].size == 0 ||
+          selectedFilters[field].has(article[field]));
+      }
     }
   })
 
@@ -195,15 +200,27 @@ const HomePage = () => {
               ) : (
                 <>
                   <SearchResults>
-                    {filteredResults.map((article, i) => (
-                      <Cord19SearchResult
-                        key={i}
-                        article={article}
-                        position={i}
-                        queryTokens={queryTokens}
-                        queryId={queryId}
-                      />
-                    ))}
+                    {filteredResults.map((article, i) => {
+                    switch(selectedVertical) {
+                      case SERACH_VERTICAL_ACL: {
+                        return <AclSearchResult
+                          key={i}
+                          article={article}
+                          position={i}
+                          queryTokens={queryTokens}
+                          queryId={queryId}
+                        />
+                      }
+                      case SERACH_VERTICAL_CORD19: {
+                        return <Cord19SearchResult
+                          key={i}
+                          article={article}
+                          position={i}
+                          queryTokens={queryTokens}
+                          queryId={queryId}
+                        />
+                      }
+                    }})}
                   </SearchResults>
                 </>
               ))}
