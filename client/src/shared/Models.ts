@@ -1,9 +1,27 @@
-export interface BaseCord19Article {
+export interface BaseArticle {
+  id: string;
+  contents: string;
   [key: string]: any;
 }
 
-export interface BaseAclArticle {
-  [key: string]: any;
+export interface BaseCord19Article extends BaseArticle {
+  abstract: string;
+  authors: string[];
+  journal: string;
+  publish_time: string;
+  source: string[];
+  title: string;
+  url: string;
+}
+
+export interface BaseAclArticle extends BaseArticle {
+  title: string;
+  abstract_html: string;
+  authors: string[];
+  year: string;
+  url: string;
+  venues: string[];
+  sigs: string[];
 }
 
 export interface AclSearchArticle extends BaseAclArticle {
@@ -29,7 +47,6 @@ export interface AclRelatedArticle extends BaseAclArticle {
 export interface Cord19RelatedArticle extends BaseCord19Article {
   distance: number;
 }
-
 
 export interface SearchFilters {
   yearMinMax: number[];

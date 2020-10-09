@@ -146,7 +146,7 @@ const Cord19SearchResult = ({ article, position, queryId, queryTokens }: SearchR
             <SectionTitle className="hideCollapsed">Full-Text Excerpt</SectionTitle>
           </ResultText>
         )}
-        {paragraphs.map((paragraph, i) => (
+        {paragraphs && paragraphs.map((paragraph, i) => (
           <Paragraph marginTop={i === 0 ? 0 : 16} key={i} collapsed={collapsed}>
             {highlightText(paragraph, highlights[i], queryTokens)}
             {i === paragraphs.length - 1 && highlights[i] && highlights[i].length > 0 && (
