@@ -46,35 +46,41 @@ export const parseAbstract = (abstract: string): string => {
 export const parseResponse = (data: any, verticle: SearchVerticalOption): BaseArticle => {
   switch(verticle.label) {
     case SERACH_VERTICAL_ACL.label: {
+      const {id, contents, title, abstract_html, authors, year, url, venues, sigs, ...others} = data;
       return {
-        id: data["id"],
-        contents: data["contents"],
-        title: data["title"][0],
-        abstract_html: data["abstract_html"][0],
-        authors: data["authors"],
-        year: data["year"][0],
-        url: data["url"][0],
-        venues: data["venues"],
-        sigs: data["sigs"]
+        id: id,
+        contents: contents,
+        title: title[0],
+        abstract_html: abstract_html[0],
+        authors: authors,
+        year: year[0],
+        url: url[0],
+        venues: venues,
+        sigs: sigs,
+        ...others
       } as BaseAclArticle
     }
     case SERACH_VERTICAL_CORD19.label: {
+      const {id, contents, abstract, authors, journal, publish_time, source_x, title, url, ...others} = data;
       return {
-        id: data["id"],
-        contents: data["contents"],
-        abstract: data["abstract"][0],
-        authors: data["authors"],
-        journal: data["journal"][0],
-        publish_time: data["publish_time"][0],
-        source: data["source_x"],
-        title: data["title"][0],
-        url: data["url"][0]
+        id: id,
+        contents: contents,
+        abstract: abstract[0],
+        authors: authors,
+        journal: journal[0],
+        publish_time: publish_time[0],
+        source: source_x,
+        title: title[0],
+        url: url[0],
+        ...others
       } as BaseCord19Article
     }
     default: {
+      const {id, contents, ...others} = data;
       return {
-        id: data["id"],
-        contents: data["contents"]
+        id: id,
+        contents: contents,
+        ...others
       } as BaseArticle
     }
   }
